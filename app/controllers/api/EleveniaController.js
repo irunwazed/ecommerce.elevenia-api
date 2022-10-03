@@ -139,14 +139,17 @@ export default class EleveniaController {
 				{ modelNm: 'testing model' },
 				{ prcCmpExpYn: 'Y' },
 				{ paidSelPrc: '250000' },
-				// { exteriorSpecialNote: 'baru digunakan 2 kali' }, 
+				{ exteriorSpecialNote: 'baru digunakan 2 kali' }, 
+				{ tmpltSeq: '15557714' },
+				{ prdWght: '10' },
+				{ rtngExchDetail: 'https://www.elevenia.co.id/prd-lap-kanebo-super-mobil-motor-cafe-tanpa-serat-15557714' },
 			]
 		};
-		console.log(xml(data))
 
 		let dataXML = '<?xml version="1.0" encoding="UTF-8"?>'+xml(data);
 
 
+		console.log(dataXML)
 
 		try{
 			let temp = await axios.post('http://api.elevenia.co.id/rest/prodservices/product', dataXML);
