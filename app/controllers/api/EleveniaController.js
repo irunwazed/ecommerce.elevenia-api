@@ -31,27 +31,125 @@ export default class EleveniaController {
 		}
 	}
 
+	static async category(req, res){
+		try{
+			let temp = await axios.get(' http://api.elevenia.co.id/rest/cateservice/category/1');
+			let myJson = convertXML(temp.data);
+			return res.send({message: myJson})
+		}catch(err){
+			console.log(err.message);
+			return res.send({message: err.message})
+		}
+	}
+
 	static async store(req, res){
+		// let data = {
+		// 	Product: [
+		// 		{ selMnbdNckNm: 'aka' },
+		// 		{ selMthdCd: '05' },
+		// 		{ dispCtgrNo: '53' },
+		// 		{ ProductCtgrAttribute: 
+		// 			[
+		// 				{ prdAttrCd: '2000042', },
+		// 				{ prdAttrNm: 'Neck Style', },
+		// 				{ prdAttrNo: '161075', },
+		// 				{ prdAttrVal: 'Neck Style Value', },
+		// 			] 
+		// 		},
+		// 		{ prdNm: 'test Product' },
+		// 		{ paidSelPrc: '250000' }, 
+		// 		{ exteriorSpecialNote: 'baru digunakan 2 kali' }, 
+		// 		{ prdStatCd: '02' },
+		// 		{ prdWght: '10' },
+		// 		{ dlvGrntYn: 'Y' },
+		// 		{ minorSelCnYn: 'Y' },
+		// 		{ orgnTypCd: '01' },
+		// 		{ orgnNmVal: 'China' },
+		// 		{ sellerPrdCd: 'SKU-'+Math.random() },
+		// 		{ suplDtyfrPrdClfCd: '01' },
+		// 		{ minorSelCnYn: 'Y' },
+		// 		{ prdImage01: '<![CDATA[https://s0.bukalapak.com/img/02352615592/s-330-330/data.jpeg.webp]]>' },
+		// 		{ htmlDetail: '<![CDATA[<p>descript</p>]]>' },
+		// 		{ selTermUseYn: 'Y' },
+		// 		{ selPrc: '50000' },
+		// 		{ prdSelQty: '100' },
+		// 		{ divCnAreaCd: '01' },
+		// 		{ spplWyCd: '01' },
+		// 		{ divCstInsBasiCd: '01' },
+		// 		{ addrSeqOut: '4' },
+		// 		{ addrSeqIn: '8' },
+		// 		{ rtngdDivCst: '2500' },
+		// 		{ exchDivCst: '6000' },
+		// 		{ asDetail: 'Sorry, no after select this product' },
+		// 		{ rtngExchDetail: 'Excecute return' },
+		// 		{ brand: 'testing brand' },
+		// 		{ modelNm: 'testing model' },
+		// 		{ prcCmpExpYn: 'Y' },
+		// 		{ failedShipping: 'Y' },
+		// 	]
+		// };
+
 		let data = {
 			Product: [
-				{ selMnbdNckNm: 'N' },
-				{ selMthdCd: '01' },
-				{ dispCtgrNo: '01' },
-				{ ProductCtgrAttribute: [
-					{
-						prdAttrCd: '200',
-						prdAttrNm: 'Brand',
-						prdAttrNo: '2002',
-					}
-				] },
+				{ selMnbdNckNm: 'aka' },
+				{ selMthdCd: '05' },
+				{ dispCtgrNo: '53' },
+				{ ProductCtgrAttribute: 
+					[
+						{ prdAttrCd: '2000042', },
+						{ prdAttrNm: 'Neck Style', },
+						{ prdAttrNo: '161075', },
+						{ prdAttrVal: 'Neck Style Value', },
+					] 
+				},
+				{ ProductCtgrAttribute: 
+					[
+						{ prdAttrCd: '2000017', },
+						{ prdAttrNm: 'Fabric', },
+						{ prdAttrNo: '161074', },
+						{ prdAttrVal: 'FabricValue', },
+					] 
+				},
+				{ prdNm: 'test Product' },
+				{ advrtStmt: 'hot item' },
+				{ orgnTypCd: '03' },
+				{ orgnNmVal: 'Other: China' },
+				{ sellerPrdCd: 'SKU-000010001' },
+				{ suplDtyfrPrdClfCd: '01' },
+				{ prdStatCd: '01' },
+				{ minorSelCnYn: 'Y' },
+				{ prdImage01: '<![CDATA[https://s0.bukalapak.com/img/02352615592/s-330-330/data.jpeg.webp]]>' },
+				{ htmlDetail: '<![CDATA[<p>descript</p>]]>' },
+				{ selTermUseYn: 'N' },
+				{ selPrc: '50000' },
+				{ prdSelQty: '100' },
+				{ divCnAreaCd: '01' },
+				{ spplWyCd: '01' },
+				{ divCstInsBasiCd: '03' },
+				{ divCstI: '2500' },
+				{ PrdFrDivBasiAmt: '50000' },
+				{ divCstPayTypCd: '01' },
+				{ addrSeqOut: '4' },
+				{ addrSeqIn: '8' },
+				{ rtngdDivCst: '25000' },
+				{ exchDivCst: '60000' },
+				{ asDetail: 'Sorry, no after select this product' },
+				{ company: 'testing humnan' },
+				{ brand: 'testing brand' },
+				{ modelNm: 'testing model' },
+				{ prcCmpExpYn: 'Y' },
+				{ paidSelPrc: '250000' },
+				// { exteriorSpecialNote: 'baru digunakan 2 kali' }, 
 			]
 		};
 		console.log(xml(data))
 
+		let dataXML = '<?xml version="1.0" encoding="UTF-8"?>'+xml(data);
+
 
 
 		try{
-			let temp = await axios.post('http://api.elevenia.co.id/rest/prodservices/product', xml(data));
+			let temp = await axios.post('http://api.elevenia.co.id/rest/prodservices/product', dataXML);
 			let myJson = convertXML(temp.data);
 			return res.send({message: myJson})
 
