@@ -16,8 +16,10 @@ ubah ".env.example" menjadi ".env"
 # input data otomatis
 
 akan memasukkan data akun
+```
 username : admin
 password : 123456
+```
 
 dan memasukkan 100 dumb data
 ```
