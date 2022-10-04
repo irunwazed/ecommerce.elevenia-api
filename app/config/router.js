@@ -34,6 +34,7 @@ router.get("/elevenia/category", route('api/EleveniaController@category'))
 router.get("/elevenia/product", route('api/EleveniaController@product'))
 router.post("/elevenia/product", route('api/EleveniaController@store'))
 router.get("/elevenia/set-product", route('api/EleveniaController@getProductFromElevenia'))
+router.get("/elevenia/hidden-product/:prdNo", route('api/EleveniaController@hiddenProduct'))
 // . Api
 
 router.get("*", route('api/HomeController@notFound'))

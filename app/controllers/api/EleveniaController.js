@@ -11,13 +11,29 @@ export default class EleveniaController {
 
 	
 	static async getProductFromElevenia(req, res){
-		
 		await db.product.deleteMany({})
 		let tes = await loadData(1);
 		let status = await inputData(tes, 0);
-
 		return res.send(status)
+	}
 
+	static async hiddenProduct(req, res){
+		let prdNo = req.params.prdNo
+		console.log(prdNo)
+		try{
+			let temp = await axios.put('http://api.elevenia.co.id/rest/prodstatservice/stat/stopdisplay/'+prdNo);
+			let myJson = convertXML(temp.data);
+			let status = myJson.ClientMessage.children[1].resultCode.content;
+			if(status == 200){
+				await db.product.deleteOne({no: prdNo})
+			}
+			return res.send({
+				message: myJson.ClientMessage.children[0].message.content, 
+				statusCode: myJson.ClientMessage.children[1].resultCode.content})
+		}catch(err){
+			console.log(err.message);
+			return res.send({message: err.message})
+		}
 	}
 
 	static async product(req, res){
@@ -43,51 +59,6 @@ export default class EleveniaController {
 	}
 
 	static async store(req, res){
-		// let data = {
-		// 	Product: [
-		// 		{ selMnbdNckNm: 'aka' },
-		// 		{ selMthdCd: '05' },
-		// 		{ dispCtgrNo: '53' },
-		// 		{ ProductCtgrAttribute: 
-		// 			[
-		// 				{ prdAttrCd: '2000042', },
-		// 				{ prdAttrNm: 'Neck Style', },
-		// 				{ prdAttrNo: '161075', },
-		// 				{ prdAttrVal: 'Neck Style Value', },
-		// 			] 
-		// 		},
-		// 		{ prdNm: 'test Product' },
-		// 		{ paidSelPrc: '250000' }, 
-		// 		{ exteriorSpecialNote: 'baru digunakan 2 kali' }, 
-		// 		{ prdStatCd: '02' },
-		// 		{ prdWght: '10' },
-		// 		{ dlvGrntYn: 'Y' },
-		// 		{ minorSelCnYn: 'Y' },
-		// 		{ orgnTypCd: '01' },
-		// 		{ orgnNmVal: 'China' },
-		// 		{ sellerPrdCd: 'SKU-'+Math.random() },
-		// 		{ suplDtyfrPrdClfCd: '01' },
-		// 		{ minorSelCnYn: 'Y' },
-		// 		{ prdImage01: '<![CDATA[https://s0.bukalapak.com/img/02352615592/s-330-330/data.jpeg.webp]]>' },
-		// 		{ htmlDetail: '<![CDATA[<p>descript</p>]]>' },
-		// 		{ selTermUseYn: 'Y' },
-		// 		{ selPrc: '50000' },
-		// 		{ prdSelQty: '100' },
-		// 		{ divCnAreaCd: '01' },
-		// 		{ spplWyCd: '01' },
-		// 		{ divCstInsBasiCd: '01' },
-		// 		{ addrSeqOut: '4' },
-		// 		{ addrSeqIn: '8' },
-		// 		{ rtngdDivCst: '2500' },
-		// 		{ exchDivCst: '6000' },
-		// 		{ asDetail: 'Sorry, no after select this product' },
-		// 		{ rtngExchDetail: 'Excecute return' },
-		// 		{ brand: 'testing brand' },
-		// 		{ modelNm: 'testing model' },
-		// 		{ prcCmpExpYn: 'Y' },
-		// 		{ failedShipping: 'Y' },
-		// 	]
-		// };
 
 		let data = {
 			Product: [
@@ -143,6 +114,7 @@ export default class EleveniaController {
 				{ tmpltSeq: '15557714' },
 				{ prdWght: '10' },
 				{ rtngExchDetail: 'https://www.elevenia.co.id/prd-lap-kanebo-super-mobil-motor-cafe-tanpa-serat-15557714' },
+				{ modelNm: 'testing model' },
 			]
 		};
 
@@ -222,7 +194,7 @@ const inputData = async (products, no) => {
 			if(Object.keys(e)[0] === 'prdImage04'){
 				data = {...data, image: e.prdImage04.content}
 			}
-		})
+		})	
 		if(data.image === undefined){
 			data.image = 'http://127.0.0.1:8000/img/image.png';
 		}
