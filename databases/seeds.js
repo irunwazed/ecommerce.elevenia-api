@@ -9,6 +9,13 @@ const running = async () => {
     useUnifiedTopology: true
   })
 
+
+	await db.users.deleteMany({})
+  await db.users.insertMany([
+		{username: 'admin', password: bcrypt.hashSync('123456', 10), level: 1}
+	]);
+  console.log('insert data user');
+
   await db.product.deleteMany({})
   let dataProduct = [];
   let number = 1;
@@ -18,11 +25,6 @@ const running = async () => {
   await db.product.insertMany(dataProduct);
   console.log('insert data product');
 
-	await db.users.deleteMany({})
-  await db.users.insertMany([
-		{username: 'admin', password: bcrypt.hashSync('123456', 10), level: 1}
-	]);
-  console.log('insert data user');
 
 }
 
