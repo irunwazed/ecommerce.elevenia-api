@@ -19,7 +19,7 @@ export default class EleveniaController {
 
 	static async hiddenProduct(req, res){
 		let prdNo = req.params.prdNo
-		console.log(prdNo)
+		// console.log(prdNo)
 		try{
 			let temp = await axios.put('http://api.elevenia.co.id/rest/prodstatservice/stat/stopdisplay/'+prdNo);
 			let myJson = convertXML(temp.data);
@@ -41,6 +41,34 @@ export default class EleveniaController {
 			let temp = await axios.get('http://api.elevenia.co.id/rest/prodservices/product/details/29325975');
 			let myJson = convertXML(temp.data);
 			return res.send({message: myJson})
+		}catch(err){
+			console.log(err.message);
+			return res.send({message: err.message})
+		}
+	}
+
+	static async editHarga(req, res){
+		let prdNo = req.params.no;
+		let price = req.params.price;
+		try{
+			let temp = await axios.get('http://api.elevenia.co.id/rest/prodservices/product/price/'+prdNo+'/'+price);
+			let myJson = convertXML(temp.data);
+			let messageElevenia = myJson.ClientMessage.children;
+			let message = '';
+			let statusCode = 500;
+			messageElevenia.forEach(e => {
+				if(e.message != null){
+					message = e.message.content;
+				}
+				if(e.resultCode != null){
+					statusCode = e.resultCode.content;
+				}
+			})
+			if(statusCode == 200){
+				await db.product.findOneAndUpdate({no: prdNo}, {price: price})
+			}
+
+			return res.send({message: message, statusCode: statusCode})
 		}catch(err){
 			console.log(err.message);
 			return res.send({message: err.message})
@@ -117,12 +145,7 @@ export default class EleveniaController {
 				{ modelNm: 'testing model' },
 			]
 		};
-
 		let dataXML = '<?xml version="1.0" encoding="UTF-8"?>'+xml(data);
-
-
-		console.log(dataXML)
-
 		try{
 			let temp = await axios.post('http://api.elevenia.co.id/rest/prodservices/product', dataXML);
 			let myJson = convertXML(temp.data);
@@ -199,7 +222,7 @@ const inputData = async (products, no) => {
 			data.image = 'http://127.0.0.1:8000/img/image.png';
 		}
 		await db.product.insertMany([data]);
-		console.log(data);
+		// console.log(data);
 		// Object.keys(products[no].product.children)
 		// console.log(dataProduct.Product.children);
 		// console.log(dataProduct);

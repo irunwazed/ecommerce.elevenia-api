@@ -17,6 +17,7 @@ export default class LoginController {
 		let user = await db.users.find({
 			username: req.body.username,
 		});
+
 		if (user.length != 1)
 			return res.status(400).send({
 				message: "username not found!",

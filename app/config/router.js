@@ -23,17 +23,21 @@ router.post("/api/login", [
   check('password').exists(),
 ], route('api/LoginController@login'))
 router.get("/api/cek-login", route('api/LoginController@cekLogin'))
-// router.use('/api', userMiddleware.checkApi);
+router.use('/api', userMiddleware.checkApi);
+router.use('/elevenia', userMiddleware.checkApi);
 
 
 router.get("/api/product", route('api/ProductController@index'))
 router.post("/api/product", route('api/ProductController@store'))
+router.put("/api/product/:no", route('api/ProductController@update'))
+router.delete("/api/product/:no", route('api/ProductController@delete'))
 
 
 router.get("/elevenia/category", route('api/EleveniaController@category'))
 router.get("/elevenia/product", route('api/EleveniaController@product'))
 router.post("/elevenia/product", route('api/EleveniaController@store'))
 router.get("/elevenia/set-product", route('api/EleveniaController@getProductFromElevenia'))
+router.get("/elevenia/harga-edit/:no/:price", route('api/EleveniaController@editHarga'))
 router.get("/elevenia/hidden-product/:prdNo", route('api/EleveniaController@hiddenProduct'))
 // . Api
 

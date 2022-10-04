@@ -1,16 +1,36 @@
 # INstalation
 
-bila running start membutuhkan
+bila tidak memliki nodemon
 ```
 npm install -g nodemon
 ```
 
-
-# Running
-
+install node module
 ```
 npm install
-npm start
-npm test
+```
+
+# env
+ubah ".env.example" menjadi ".env"
+
+# input data otomatis
+
+akan memasukkan data akun
+username : admin
+password : 123456
+
+dan memasukkan 100 dumb data
+```
 npm run-script seed
+```
+
+# testing
+```
+npm test
+```
+
+# Running
+running pada http://127.0.0.1:8000/
+```
+npm start
 ```

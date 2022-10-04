@@ -27,7 +27,7 @@ module.exports = mongoose => {
       },
       description: {
 				type: String,
-				required: true,
+				default : null
 			},
     },
     { timestamps: true }
